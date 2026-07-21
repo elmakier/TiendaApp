@@ -1,0 +1,35 @@
+@model TiendaApp.Models.Producto
+
+@{
+    ViewData["Title"] = "Nuevo Producto";
+}
+
+<h2>Nuevo Producto</h2>
+
+<form asp-action="Create" method="post">
+
+    <div class="mb-3">
+        <label asp-for="Nombre"></label>
+        <input asp-for="Nombre" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Precio"></label>
+        <input asp-for="Precio" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Stock"></label>
+        <input asp-for="Stock" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FechaVencimiento"></label>
+        <input asp-for="FechaVencimiento" type="date" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Guardar
+    </button>
+
+</form>
