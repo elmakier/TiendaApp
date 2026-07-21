@@ -1,37 +1,27 @@
-using System.ComponentModel.DataAnnotations; namespace TiendaApp.Models; 
+using System.ComponentModel.DataAnnotations;
 
- 
+namespace TiendaApp.Models;
 
-// RECOMENDACIÓN SOLID: Una clase debe tener una sola responsabilidad (SRP) 
+// RECOMENDACIÓN SOLID: Una clase debe tener una sola responsabilidad (SRP)
+public class Producto
+{
+    public int Id { get; set; }
 
-public class Producto 
+    [Required(ErrorMessage = "El nombre es obligatorio")]
+    [StringLength(100)]
+    public string Nombre { get; set; } = string.Empty;
 
-{ 
+    [Range(0.01, 10000, ErrorMessage = "El precio debe ser mayor a cero")]
+    public decimal Precio { get; set; }
 
- public int Id { get; set; } 
+    public int Stock { get; set; }
 
- 
+    [DataType(DataType.Date)]
+    public DateTime FechaVencimiento { get; set; }
 
- [Required(ErrorMessage = "El nombre es obligatorio")] 
+    // Clave foránea
+    public int CategoriaId { get; set; }
 
- [StringLength(100)] 
-
- public string Nombre { get; set; } = string.Empty; 
-
- 
-
- [Range(0.01, 10000, ErrorMessage = "El precio debe ser mayor a cero")] 
-
- public decimal Precio { get; set; } // ODS 8: Uso de decimal 
-
- 
-
- public int Stock { get; set; } 
-
- 
-
- [DataType(DataType.Date)] 
-
- public DateTime FechaVencimiento { get; set; } 
-
+    // Propiedad de navegación
+    public virtual Categoria Categoria { get; set; } = null!;
 }
