@@ -50,4 +50,10 @@ public class ProductosController : Controller
 
         return View(producto);
     }
+    [Route("Promociones-del-mes")]
+    public IActionResult Promociones()
+    {
+        return View();
+        
+    }
 }
