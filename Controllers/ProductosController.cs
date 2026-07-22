@@ -1,59 +1,44 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TiendaApp.Data;
+using TiendaApp.Interfaces;
 using TiendaApp.Models;
 
 namespace TiendaApp.Controllers;
 
 public class ProductosController : Controller
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IRepository<Producto> _repository;
 
-    public ProductosController(ApplicationDbContext context)
+    public ProductosController(IRepository<Producto> repository)
     {
-        _context = context;
+        _repository = repository;
     }
 
-    // LISTAR PRODUCTOS
+    // GET: Productos
     public async Task<IActionResult> Index()
     {
-        var productos = await _context.Productos
-            .AsNoTracking()
-            .ToListAsync();
-
+        var productos = await _repository.GetAllAsync();
         return View(productos);
     }
 
-    // MOSTRAR FORMULARIO
+    // GET: Productos/Create
     public IActionResult Create()
     {
         return View();
     }
 
-    // GUARDAR PRODUCTO
+    // POST: Productos/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Producto producto)
     {
         if (ModelState.IsValid)
         {
-            // Convierte la fecha a UTC para PostgreSQL
-            producto.FechaVencimiento = DateTime.SpecifyKind(
-                producto.FechaVencimiento,
-                DateTimeKind.Utc);
-
-            _context.Productos.Add(producto);
-            await _context.SaveChangesAsync();
+            await _repository.AddAsync(producto);
+            await _repository.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
 
         return View(producto);
-    }
-    [Route("Promociones-del-mes")]
-    public IActionResult Promociones()
-    {
-        return View();
-        
     }
 }

@@ -1,11 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using TiendaApp.Data;
+using TiendaApp.Interfaces;
+using TiendaApp.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
