@@ -26,19 +26,35 @@ public class ProductosController : Controller
         return View();
     }
 
-    // POST: Productos/Create
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Producto producto)
+ // POST: Productos/Create
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Create(Producto producto)
+{
+    if (!ModelState.IsValid)
     {
-        if (ModelState.IsValid)
-        {
-            await _repository.AddAsync(producto);
-            await _repository.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Index));
-        }
-
         return View(producto);
     }
+
+    // Categoría por defecto
+    producto.CategoriaId = 1;
+
+    // Convierte la fecha a UTC para PostgreSQL
+    producto.FechaVencimiento = DateTime.SpecifyKind(
+        producto.FechaVencimiento,
+        DateTimeKind.Utc);
+
+    try
+    {
+        await _repository.AddAsync(producto);
+        await _repository.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
+    }
+    catch (Exception ex)
+    {
+        return Content(ex.ToString());
+    }
+}
+
 }

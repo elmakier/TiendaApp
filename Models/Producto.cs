@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TiendaApp.Models;
 
@@ -23,5 +25,8 @@ public class Producto
     public int CategoriaId { get; set; }
 
     // Propiedad de navegación
-    public virtual Categoria Categoria { get; set; } = null!;
+    
+
+    [ValidateNever]
+    public virtual Categoria? Categoria {get; set;}
 }
