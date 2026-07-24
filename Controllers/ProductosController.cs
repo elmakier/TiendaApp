@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TiendaApp.Interfaces;
 using TiendaApp.Models;
+using TiendaApp.ViewModels;
 
 namespace TiendaApp.Controllers;
 
@@ -26,35 +27,32 @@ public class ProductosController : Controller
         return View();
     }
 
- // POST: Productos/Create
+// POST: Productos/Create
 [HttpPost]
 [ValidateAntiForgeryToken]
-public async Task<IActionResult> Create(Producto producto)
+public async Task<IActionResult> Create(ProductoCreateViewModel vm)
 {
     if (!ModelState.IsValid)
     {
-        return View(producto);
+        return View(vm);
     }
 
-    // Categoría por defecto
-    producto.CategoriaId = 1;
-
-    // Convierte la fecha a UTC para PostgreSQL
-    producto.FechaVencimiento = DateTime.SpecifyKind(
-        producto.FechaVencimiento,
-        DateTimeKind.Utc);
-
-    try
+    // Mapeo del ViewModel a la entidad Producto
+    var producto = new Producto
     {
-        await _repository.AddAsync(producto);
-        await _repository.SaveChangesAsync();
+        Nombre = vm.Nombre,
+        Precio = vm.Precio,
+        Stock = vm.Stock,
+        FechaVencimiento = DateTime.SpecifyKind(
+            vm.FechaVencimiento,
+            DateTimeKind.Utc),
+        CategoriaId = 1
+    };
 
-        return RedirectToAction(nameof(Index));
-    }
-    catch (Exception ex)
-    {
-        return Content(ex.ToString());
-    }
+    await _repository.AddAsync(producto);
+    await _repository.SaveChangesAsync();
+
+    return RedirectToAction(nameof(Index));
 }
 
 }
