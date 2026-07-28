@@ -122,26 +122,33 @@ namespace TiendaApp.Areas.Identity.Pages.Account
                 Console.WriteLine("CreateAsync:{result.Succeeded}");
 
                 if (result.Succeeded)
-                {
-                    Console.WriteLine("USUARIO CREADO");
+{
+    Console.WriteLine("USUARIO CREADO");
 
-                    try
-                    {
-                        _logger.LogInformation("User created a new account with password.");
-                        await _userManager.AddToRoleAsync(user,"Admin");
+    var roleResult = await _userManager.AddToRoleAsync(user, "Admin");
 
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+    if (!roleResult.Succeeded)
+    {
+        Console.WriteLine("ERROR AL ASIGNAR ROL:");
 
-                        Console.WriteLine("LOGIN OK");
+        foreach (var error in roleResult.Errors)
+        {
+            Console.WriteLine(error.Description);
+        }
+    }
+    else
+    {
+        Console.WriteLine("ROL ADMIN ASIGNADO");
+    }
 
-                        return RedirectToPage("/Index");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.ToString());
-                        throw;
-                    }
-                }
+    _logger.LogInformation("User created a new account with password.");
+
+    await _signInManager.SignInAsync(user, isPersistent: false);
+
+    Console.WriteLine("LOGIN OK");
+
+    return RedirectToPage("/Index");
+}
                 foreach (var error in result.Errors)
                     {
                         Console.WriteLine(error.Description);
