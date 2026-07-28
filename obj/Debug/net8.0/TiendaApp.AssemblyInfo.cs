@@ -10,10 +10,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap5")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("TiendaApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0ab6992ebbc79bbd8b65393ee8fe71b9ae228836")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0d03152b9b703a793f1929f31376879f9d6add41")]
 [assembly: System.Reflection.AssemblyProductAttribute("TiendaApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TiendaApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

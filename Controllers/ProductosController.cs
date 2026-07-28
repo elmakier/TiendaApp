@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TiendaApp.Interfaces;
 using TiendaApp.Models;
@@ -22,37 +23,37 @@ public class ProductosController : Controller
     }
 
     // GET: Productos/Create
+    [Authorize(Roles = "Admin")]
     public IActionResult Create()
     {
         return View();
     }
 
-// POST: Productos/Create
-[HttpPost]
-[ValidateAntiForgeryToken]
-public async Task<IActionResult> Create(ProductoCreateViewModel vm)
-{
-    if (!ModelState.IsValid)
+    // POST: Productos/Create
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Create(ProductoCreateViewModel vm)
     {
-        return View(vm);
+        if (!ModelState.IsValid)
+        {
+            return View(vm);
+        }
+
+        var producto = new Producto
+        {
+            Nombre = vm.Nombre,
+            Precio = vm.Precio,
+            Stock = vm.Stock,
+            FechaVencimiento = DateTime.SpecifyKind(
+                vm.FechaVencimiento,
+                DateTimeKind.Utc),
+            CategoriaId = 1
+        };
+
+        await _repository.AddAsync(producto);
+        await _repository.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
     }
-
-    // Mapeo del ViewModel a la entidad Producto
-    var producto = new Producto
-    {
-        Nombre = vm.Nombre,
-        Precio = vm.Precio,
-        Stock = vm.Stock,
-        FechaVencimiento = DateTime.SpecifyKind(
-            vm.FechaVencimiento,
-            DateTimeKind.Utc),
-        CategoriaId = 1
-    };
-
-    await _repository.AddAsync(producto);
-    await _repository.SaveChangesAsync();
-
-    return RedirectToAction(nameof(Index));
-}
-
 }
