@@ -1,34 +1,59 @@
-@model IEnumerable<TiendaApp.Models.Producto>
-
 @{
     ViewData["Title"] = "Lista de Productos";
 }
 
 <h2>Lista de Productos</h2>
-<partial name ="_ResumenBox" />
+
+<partial name="_ResumenBox" />
 
 <p>
     <a asp-action="Create" class="btn btn-primary">Nuevo Producto</a>
 </p>
 
-<table class="table">
+<table class="table table-bordered">
     <thead>
         <tr>
             <th>Nombre</th>
             <th>Precio</th>
             <th>Stock</th>
-            <th>Fecha de Vencimiento</th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model)
-{
-        <tr>
-            <td>@item.Nombre</td>
-            <td>@item.Precio</td>
-            <td>@item.Stock</td>
-            <td>@item.FechaVencimiento.ToShortDateString()</td>
-        </tr>
-}
+    <tbody id="tablaProductos">
     </tbody>
 </table>
+
+@section Scripts
+{
+<script>
+async function cargarProductos() {
+    try {
+        const respuesta = await fetch('/api/ProductosApi');
+
+        if (!respuesta.ok) {
+            throw new Error("Error al obtener los productos");
+        }
+
+        const productos = await respuesta.json();
+
+        const tabla = document.getElementById("tablaProductos");
+        tabla.innerHTML = "";
+
+        productos.forEach(producto => {
+            tabla.innerHTML += `
+                <tr>
+                    <td>${producto.nombre}</td>
+                    <td>${producto.precio}</td>
+                    <td>${producto.stock}</td>
+                </tr>
+            `;
+        });
+    }
+    catch (error) {
+        console.error(error);
+        alert("No se pudieron cargar los productos.");
+    }
+}
+
+cargarProductos();
+</script>
+}

@@ -21,6 +21,9 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 // Add services to the container.
 
 var app = builder.Build();
@@ -30,6 +33,11 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
+}
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
@@ -82,6 +90,8 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.MapControllers();
 
 app.MapControllerRoute(
     name: "default",
