@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TiendaApp.Data;
 using TiendaApp.Interfaces;
 using TiendaApp.Repositories;
+using TiendaApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+builder.Services.AddScoped<IReportService, ReportService>();
 
 builder.Services.AddControllersWithViews();
 

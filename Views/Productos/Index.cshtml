@@ -10,6 +10,24 @@
     <a asp-action="Create" class="btn btn-primary">Nuevo Producto</a>
 </p>
 
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        Nuevo Producto
+    </a>
+
+    <a asp-controller="Reportes"
+       asp-action="Excel"
+       class="btn btn-success">
+        Descargar Excel
+    </a>
+
+    <a asp-controller="Reportes"
+       asp-action="Pdf"
+       class="btn btn-danger">
+        Descargar PDF
+    </a>
+</p>
+
 <table class="table table-bordered">
     <thead>
         <tr>

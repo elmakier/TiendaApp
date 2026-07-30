@@ -31,4 +31,18 @@ public class ProductosApiController : ControllerBase
 
         return Ok(dtos);
     }
+
+    [HttpGet("estadisticas")]
+    public async Task<IActionResult> Estadisticas()
+    {
+        var productos = await _repository.GetAllAsync();
+
+        var datos = productos.Select(p => new
+        {
+            nombre = p.Nombre,
+            stock = p.Stock
+        });
+
+        return Ok(datos);
+    }
 }

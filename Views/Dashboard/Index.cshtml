@@ -1,0 +1,33 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2>Dashboard de Productos</h2>
+
+<canvas id="graficoStock" width="600" height="300"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+async function cargarGrafico() {
+
+    const respuesta = await fetch('/api/ProductosApi/estadisticas');
+    const datos = await respuesta.json();
+
+    const nombres = datos.map(x => x.nombre);
+    const stock = datos.map(x => x.stock);
+
+    new Chart(document.getElementById('graficoStock'), {
+        type: 'bar',
+        data: {
+            labels: nombres,
+            datasets: [{
+                label: 'Stock',
+                data: stock
+            }]
+        }
+    });
+}
+
+cargarGrafico();
+</script>
